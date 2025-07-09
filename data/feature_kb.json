@@ -1,0 +1,51 @@
+[
+  {
+    "feature_id": "ai_inbox_01",
+    "feature_name": "AI Agent for FAQ & First Response",
+    "categories": ["AI Customer Service", "AI Inbox"],
+    "description": "Automatically answers repetitive customer questions using an AI agent.",
+    "how_it_helps": "Reduces support volume by handling common queries instantly.",
+    "use_cases": [
+      "Handle repetitive customer queries",
+      "Reduce wait time",
+      "24/7 automated support"
+    ],
+    "channels_supported": ["email", "Zalo", "webchat"],
+    "industries": ["e-commerce", "banking", "telecom"],
+    "recommended_team_size": ["small", "medium"],
+    "relevance_keywords": ["faq", "wait time", "support load", "deflection"],
+    "link": "https://filum.ai/features/ai-inbox"
+  },
+  {
+    "feature_id": "survey_auto_01",
+    "feature_name": "Automated Post-Purchase Surveys",
+    "categories": ["VoC", "Surveys"],
+    "description": "Send surveys automatically after transactions via email or SMS.",
+    "how_it_helps": "Improves feedback collection without manual effort.",
+    "use_cases": [
+      "Post-purchase feedback",
+      "Customer satisfaction tracking"
+    ],
+    "channels_supported": ["email", "SMS"],
+    "industries": ["e-commerce", "banking"],
+    "recommended_team_size": ["small", "medium", "large"],
+    "relevance_keywords": ["feedback", "survey", "csat", "post-purchase"],
+    "link": "https://filum.ai/features/post-purchase-survey"
+  },
+  {
+    "feature_id": "insights_01",
+    "feature_name": "Customer Journey Experience Analysis",
+    "categories": ["Insights", "Experience"],
+    "description": "Analyze customer feedback and operational data across the journey.",
+    "how_it_helps": "Find friction points in key touchpoints.",
+    "use_cases": [
+      "Understand where dropoffs happen",
+      "Spot negative moments in journey"
+    ],
+    "channels_supported": ["email", "Zalo", "POS"],
+    "industries": ["banking", "insurance", "telecom"],
+    "recommended_team_size": ["medium", "large"],
+    "relevance_keywords": ["journey", "touchpoint", "friction", "dropoff"],
+    "link": "https://filum.ai/features/journey-insights"
+  }
+]
