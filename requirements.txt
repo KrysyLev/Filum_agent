@@ -5,6 +5,3 @@ pydantic>=2.0
 # Embedding + vector search
 sentence-transformers>=2.2.2
 faiss-cpu>=1.7.4
-
-# File + CLI utils
-python-dotenv>=1.0.1
