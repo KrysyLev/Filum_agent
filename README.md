@@ -194,9 +194,7 @@ This function takes the semantically matched feature list and adjusts their scor
 - `faiss-cpu>=1.7.4`
 
 ## Example
-
-### Input
-
+>
 ```json
 {
     "pain_point": "Our support agents are overwhelmed by the high volume of repetitive questions.",
