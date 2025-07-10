@@ -1,5 +1,21 @@
 [
   {
+    "feature_id": "survey_auto_01",
+    "feature_name": "Automated Post-Purchase Surveys",
+    "categories": ["VoC", "Surveys"],
+    "description": "Send surveys automatically after transactions via email or SMS.",
+    "how_it_helps": "Improves feedback collection without manual effort.",
+    "use_cases": [
+      "Post-purchase feedback",
+      "Customer satisfaction tracking"
+    ],
+    "channels_supported": ["email", "SMS"],
+    "industries": ["e-commerce", "banking"],
+    "recommended_team_size": ["small", "medium", "large"],
+    "relevance_keywords": ["feedback", "survey", "csat", "post-purchase"],
+    "link": "https://filum.ai/features/post-purchase-survey"
+  },
+  {
     "feature_id": "ai_inbox_01",
     "feature_name": "AI Agent for FAQ & First Response",
     "categories": ["AI Customer Service", "AI Inbox"],
@@ -17,23 +33,7 @@
     "link": "https://filum.ai/features/ai-inbox"
   },
   {
-    "feature_id": "survey_auto_01",
-    "feature_name": "Automated Post-Purchase Surveys",
-    "categories": ["VoC", "Surveys"],
-    "description": "Send surveys automatically after transactions via email or SMS.",
-    "how_it_helps": "Improves feedback collection without manual effort.",
-    "use_cases": [
-      "Post-purchase feedback",
-      "Customer satisfaction tracking"
-    ],
-    "channels_supported": ["email", "SMS"],
-    "industries": ["e-commerce", "banking"],
-    "recommended_team_size": ["small", "medium", "large"],
-    "relevance_keywords": ["feedback", "survey", "csat", "post-purchase"],
-    "link": "https://filum.ai/features/post-purchase-survey"
-  },
-  {
-    "feature_id": "insights_01",
+    "feature_id": "journey_insights_01",
     "feature_name": "Customer Journey Experience Analysis",
     "categories": ["Insights", "Experience"],
     "description": "Analyze customer feedback and operational data across the journey.",
@@ -47,5 +47,37 @@
     "recommended_team_size": ["medium", "large"],
     "relevance_keywords": ["journey", "touchpoint", "friction", "dropoff"],
     "link": "https://filum.ai/features/journey-insights"
+  },
+  {
+    "feature_id": "customer_profile_01",
+    "feature_name": "Customer Profile with Interaction History",
+    "categories": ["Customer 360", "AI Inbox"],
+    "description": "Consolidate all customer interactions across channels in one view.",
+    "how_it_helps": "Provides a single view of customer touchpoints to improve service quality.",
+    "use_cases": [
+      "Unified view of customer history",
+      "Cross-channel interaction analysis"
+    ],
+    "channels_supported": ["email", "Zalo", "webchat", "call"],
+    "industries": ["banking", "retail", "telecom"],
+    "recommended_team_size": ["medium", "large"],
+    "relevance_keywords": ["360 view", "interaction history", "omnichannel"],
+    "link": "https://filum.ai/features/customer-360"
+  },
+  {
+    "feature_id": "topic_sentiment_ai_01",
+    "feature_name": "AI-Powered Topic & Sentiment Analysis",
+    "categories": ["VoC", "Conversations", "Surveys", "Insights", "Experience"],
+    "description": "Use AI to extract key themes and sentiments from open-ended feedback.",
+    "how_it_helps": "Saves time by automating feedback analysis.",
+    "use_cases": [
+      "Analyze survey comments",
+      "Identify top issues from conversations"
+    ],
+    "channels_supported": ["email", "SMS", "Zalo", "webchat"],
+    "industries": ["e-commerce", "banking", "healthcare", "insurance"],
+    "recommended_team_size": ["small", "medium", "large"],
+    "relevance_keywords": ["sentiment", "themes", "survey analysis", "feedback"],
+    "link": "https://filum.ai/features/sentiment-ai"
   }
 ]

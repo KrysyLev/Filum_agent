@@ -21,7 +21,7 @@ def main():
 
     # Save output
     with open(args.output, "w", encoding="utf-8") as f:
-        f.write(output.json(indent=2))
+        f.write(output.model_dump_json(indent=2))
 
     print(f"Suggestions written to {args.output}")
 

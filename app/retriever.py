@@ -10,7 +10,9 @@ from app.schema import AgentInput
 
 
 class FeatureRetriever:
-    def __init__(self, kb_path: str = "data/feature_kb.json", index_path: str = "data/index"):
+    def __init__(
+        self, kb_path: str = "data/feature_kb.json", index_path: str = "data/index"
+    ):
         self.kb_path = kb_path
         self.index_path = index_path
         self.model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
@@ -28,7 +30,7 @@ class FeatureRetriever:
         else:
             embeddings = self.model.encode(
                 [f["description"] + " " + f["how_it_helps"] for f in self.features],
-                convert_to_numpy=True
+                convert_to_numpy=True,
             )
             index = faiss.IndexFlatL2(embeddings.shape[1])
             index.add(embeddings)
@@ -43,32 +45,49 @@ class FeatureRetriever:
 
         # get top-k features by semantic match
         candidates = [self.features[i] for i in indices[0]]
+        # 🧠 DEBUG: In ra khoảng cách vector L2 để hiểu rõ sự khác biệt
+        print("\n[🔍 Semantic Search Results - Raw FAISS Distances]")
+        for i, (f, dist) in enumerate(zip(candidates, distances[0])):
+            print(f"[{i + 1}] {f['feature_name']} - L2 Distance: {dist:.4f}")
 
         # hybrid logic: filter or rerank using metadata from company_profile
-        return self._rerank_with_context(agent_input, candidates)
+        return self._rerank_with_context(agent_input, candidates, distances)
 
-    def _rerank_with_context(self, agent_input: AgentInput, candidates: List[Dict]) -> List[Dict]:
+    def _rerank_with_context(
+        self, agent_input: AgentInput, candidates: List[Dict], distances=None
+    ) -> List[Dict]:
         profile = agent_input.company_profile
-        for f in candidates:
-            score = 1.0
 
-            # industry match
-            if profile and profile.industry:
-                if profile.industry not in f.get("industries", []):
-                    score *= 0.9  # downweight if not matched
+        # Convert FAISS L2 distance to cosine-like similarity (roughly)
+        similarities = [1 / (1 + d) for d in distances[0]]  # simple inverse
+        similarities = np.array(similarities)
+        softmax_scores = np.exp(similarities) / np.sum(np.exp(similarities))
 
-            # team size fit
-            if profile and profile.team_size:
-                if profile.team_size not in f.get("recommended_team_size", []):
-                    score *= 0.8
+        reranked = []
+        for i, f in enumerate(candidates):
+            score = softmax_scores[i]
 
-            # touchpoint match
-            if profile and profile.customer_touchpoints:
-                overlap = set(profile.customer_touchpoints).intersection(set(f.get("channels_supported", [])))
-                if not overlap:
+            # Apply hybrid weights
+            if profile:
+                # Industry match
+                if profile.industry and profile.industry not in f.get("industries", []):
+                    score *= 0.9
+
+                # Team size fit
+                if profile.team_size and profile.team_size not in f.get(
+                    "recommended_team_size", []
+                ):
                     score *= 0.85
 
-            f["relevance_score"] = round(score, 4)
+                # Touchpoint overlap
+                if profile.customer_touchpoints:
+                    overlap = set(profile.customer_touchpoints).intersection(
+                        set(f.get("channels_supported", []))
+                    )
+                    if not overlap:
+                        score *= 0.85
 
-        # sort by adjusted score (semantic relevance * metadata match)
-        return sorted(candidates, key=lambda x: x["relevance_score"], reverse=True)
+            f["relevance_score"] = round(float(score), 4)
+            reranked.append(f)
+
+        return sorted(reranked, key=lambda x: x["relevance_score"], reverse=True)

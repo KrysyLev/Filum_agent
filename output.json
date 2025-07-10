@@ -1,0 +1,62 @@
+{
+  "suggested_solutions": [
+    {
+      "feature_name": "AI Agent for FAQ & First Response",
+      "categories": [
+        "AI Customer Service",
+        "AI Inbox"
+      ],
+      "description": "Automatically answers repetitive customer questions using an AI agent.",
+      "how_it_helps": "Reduces support volume by handling common queries instantly.",
+      "relevance_score": 0.2311,
+      "link": "https://filum.ai/features/ai-inbox"
+    },
+    {
+      "feature_name": "AI-Powered Topic & Sentiment Analysis",
+      "categories": [
+        "VoC",
+        "Conversations",
+        "Surveys",
+        "Insights",
+        "Experience"
+      ],
+      "description": "Use AI to extract key themes and sentiments from open-ended feedback.",
+      "how_it_helps": "Saves time by automating feedback analysis.",
+      "relevance_score": 0.1949,
+      "link": "https://filum.ai/features/sentiment-ai"
+    },
+    {
+      "feature_name": "Automated Post-Purchase Surveys",
+      "categories": [
+        "VoC",
+        "Surveys"
+      ],
+      "description": "Send surveys automatically after transactions via email or SMS.",
+      "how_it_helps": "Improves feedback collection without manual effort.",
+      "relevance_score": 0.1939,
+      "link": "https://filum.ai/features/post-purchase-survey"
+    },
+    {
+      "feature_name": "Customer Profile with Interaction History",
+      "categories": [
+        "Customer 360",
+        "AI Inbox"
+      ],
+      "description": "Consolidate all customer interactions across channels in one view.",
+      "how_it_helps": "Provides a single view of customer touchpoints to improve service quality.",
+      "relevance_score": 0.1458,
+      "link": "https://filum.ai/features/customer-360"
+    },
+    {
+      "feature_name": "Customer Journey Experience Analysis",
+      "categories": [
+        "Insights",
+        "Experience"
+      ],
+      "description": "Analyze customer feedback and operational data across the journey.",
+      "how_it_helps": "Find friction points in key touchpoints.",
+      "relevance_score": 0.145,
+      "link": "https://filum.ai/features/journey-insights"
+    }
+  ]
+}
