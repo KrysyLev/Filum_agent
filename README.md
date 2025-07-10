@@ -19,7 +19,6 @@ Filum Agent is a Python-based solution designed to help businesses address pain 
 │   ├── agent.py          # Main agent logic
 │   ├── retriever.py      # Feature retrieval and ranking
 │   ├── schema.py         # Data models for input and output
-│   ├── utils.py          # Utility functions
 ├── data/
 │   ├── feature_kb.json   # Feature knowledge base
 │   ├── index/            # Directory for FAISS index files
@@ -28,6 +27,8 @@ Filum Agent is a Python-based solution designed to help businesses address pain 
 ├── main.py               # CLI entry point
 ├── requirements.txt      # Python dependencies
 ├── README.md             # Documentation
+├── LICENCSE              # LICENCSE
+
 ```
 
 ## Installation
@@ -92,26 +93,102 @@ The output JSON file will contain suggested solutions:
     ]
 }
 ```
-
 ## How It Works Internally
 
-1. **FeatureRetriever**:
-   - Loads the knowledge base from `data/feature_kb.json`.
-   - Builds or loads a FAISS index for efficient vector-based search.
-   - Performs semantic search using Sentence Transformers.
-   - Reranks results based on company profile metadata.
+### FeatureRetriever
 
-2. **FilumAgent**:
+The `FeatureRetriever` class is responsible for loading the knowledge base, performing semantic search, and reranking results based on business context.
+
+#### `retrieve(self, agent_input: AgentInput, top_k: int = 3) -> List[Dict]`
+
+**Purpose**:  
+Retrieves the top `k` most relevant features from the knowledge base using semantic similarity and reranks them based on business context.
+
+**Steps**:  
+1. Extract the pain point query:  
+    ```python
+    query = agent_input.pain_point
+    ```
+2. Generate embedding vector for the query:  
+    ```python
+    query_vector = self.model.encode([query])
+    ```
+3. Search for the top `k` most semantically similar features in the FAISS index:  
+    ```python
+    distances, indices = self.index.search(np.array(query_vector), top_k)
+    ```
+    - `distances`: L2 distance between the query and each feature.  
+3. Search for the top `k` most semantically similar features in the FAISS index:  
+    ```python
+    distances, indices = self.index.search(np.array(query_vector), top_k)
+    ```
+    - `distances`: L2 distance between the query and each feature.  
+    - `indices`: Index of each matched feature in the knowledge base.
+
+4. Retrieve the actual feature metadata:  
+    ```python
+    candidates = [self.features[i] for i in indices[0]]
+    ```
+
+5. (Optional) Print debug info on L2 distances:  
+    ```python
+    print(f"[{i + 1}] {f['feature_name']} - L2 Distance: {dist:.4f}")
+    ```
+
+6. Pass to `_rerank_with_context()` for hybrid reranking:  
+    ```python
+    return self._rerank_with_context(agent_input, candidates, distances)
+    ```
+
+---
+
+### `_rerank_with_context(self, agent_input: AgentInput, candidates: List[Dict], distances=None) -> List[Dict]`
+
+**Purpose**:  
+This function takes the semantically matched feature list and adjusts their scores based on business context to return a more tailored recommendation.
+
+**Step-by-step**:  
+1. Convert FAISS distances into cosine-like similarity:  
+    ```python
+    similarities = [1 / (1 + d) for d in distances[0]]
+    ```
+    - Higher values for smaller distances.  
+    - Ensures relevance grows as semantic similarity increases.
+
+2. Apply softmax to normalize the scores:  
+    ```python
+    softmax_scores = np.exp(similarities) / np.sum(np.exp(similarities))
+    ```
+    - Ensures scores are in range (0, 1).  
+    - Makes ranking more distinct and interpretable.
+
+3. Loop through each candidate and apply hybrid context weights:  
+    ```python
+    if profile.industry not in feature["industries"]: score *= 0.9
+    if profile.team_size not in feature["recommended_team_size"]: score *= 0.85
+    if no channel overlap: score *= 0.85
+    ```
+
+4. Attach final relevance score to each feature:  
+    ```python
+    f["relevance_score"] = round(float(score), 4)
+    ```
+
+5. Return the top features sorted by adjusted relevance:  
+    ```python
+    return sorted(reranked, key=lambda x: x["relevance_score"], reverse=True)
+    ```
+
+### **FilumAgent**:
    - Uses `FeatureRetriever` to retrieve and rank features.
    - Converts raw matches into structured output using Pydantic models.
 
-3. **CLI**:
+### **CLI**:
    - Parses input and output file paths.
    - Executes the agent and saves the results.
 
 ## Dependencies
 
-- `langchain>=0.1.13`
 - `pydantic>=2.0`
 - `sentence-transformers>=2.2.2`
 - `faiss-cpu>=1.7.4`
@@ -160,4 +237,3 @@ python main.py --input input.json --output output.json
 ## License
 
 This project is licensed under the MIT License.
-```

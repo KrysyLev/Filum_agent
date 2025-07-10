@@ -10,6 +10,35 @@ from app.schema import AgentInput
 
 
 class FeatureRetriever:
+    """
+    FeatureRetriever is a class designed to retrieve relevant features based on semantic similarity
+    and contextual metadata. It uses a pre-trained SentenceTransformer model "all-MiniLM-L6-v2" for embedding generation
+    and FAISS for efficient similarity search.
+
+    Attributes:
+        kb_path (str): Path to the knowledge base JSON file containing feature descriptions.
+        index_path (str): Path to store or load the FAISS index.
+        model (SentenceTransformer): Pre-trained sentence transformer model for embedding generation.
+        features (List[Dict]): List of features loaded from the knowledge base.
+        index (faiss.Index): FAISS index for efficient similarity search.
+
+    Methods:
+        __init__(kb_path: str, index_path: str):
+            Initializes the FeatureRetriever with paths to the knowledge base and FAISS index.
+
+        _load_kb() -> List[Dict]:
+            Loads the knowledge base from the specified JSON file.
+
+        _build_or_load_index():
+            Builds a FAISS index from feature embeddings or loads an existing index from disk.
+
+        retrieve(agent_input: AgentInput, top_k: int = 5) -> List[Dict]:
+            Retrieves the top-k relevant features based on semantic similarity to the agent's input.
+
+        _rerank_with_context(agent_input: AgentInput, candidates: List[Dict], distances=None) -> List[Dict]:
+            Reranks the retrieved features using contextual metadata from the agent's company profile.
+    """
+
     def __init__(
         self, kb_path: str = "data/feature_kb.json", index_path: str = "data/index"
     ):
@@ -45,8 +74,9 @@ class FeatureRetriever:
 
         # get top-k features by semantic match
         candidates = [self.features[i] for i in indices[0]]
-        # 🧠 DEBUG: In ra khoảng cách vector L2 để hiểu rõ sự khác biệt
-        print("\n[🔍 Semantic Search Results - Raw FAISS Distances]")
+
+        # Print out distance of vector L2
+        print("\n[Semantic Search Results - Raw FAISS Distances]")
         for i, (f, dist) in enumerate(zip(candidates, distances[0])):
             print(f"[{i + 1}] {f['feature_name']} - L2 Distance: {dist:.4f}")
 
